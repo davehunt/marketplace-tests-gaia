@@ -2,7 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from marionette import By
+from marionette import By, Wait, expected
 from gaiatest.apps.base import Base
 
 
@@ -31,12 +31,10 @@ class Marketplace(Base):
 
     def switch_to_marketplace_frame(self):
         self.marionette.switch_to_frame()
-        self.wait_for_element_present(*self._marketplace_frame_locator)
-        marketplace_frame = self.marionette.find_element(*self._marketplace_frame_locator)
-        self.marionette.switch_to_frame(marketplace_frame)
-        self.wait_for_element_present(*self._marketplace_frame_locator)
-        marketplace_frame = self.marionette.find_element(*self._marketplace_frame_locator)
-        self.marionette.switch_to_frame(marketplace_frame)
+        self.marionette.switch_to_frame(Wait(self.marionette).until(
+            expected.element_present(*self._marketplace_frame_locator)))
+        self.marionette.switch_to_frame(Wait(self.marionette).until(
+            expected.element_present(*self._marketplace_frame_locator)))
 
     @property
     def offline_message_text(self):
